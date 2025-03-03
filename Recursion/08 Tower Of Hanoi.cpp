@@ -10,7 +10,6 @@ void toh(int d, int t1, int t2, int t3) {
 
 int main() {
     int n;
-    cout << "Enter the number of disks: ";
     cin >> n;
     cout << endl;
     toh(n, 1, 2, 3);
