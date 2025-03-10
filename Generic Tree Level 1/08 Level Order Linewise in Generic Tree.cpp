@@ -34,7 +34,56 @@ Node* createGenericTree(vector<int> v) {
     return root;
 }
 
-void levelOrderLinewiseGenericTree(Node* root) {
+// Method 1 : Using Child Queue
+void levelOrderLinewiseGenericTree1(Node* root) {
+    queue<Node*> pq;
+    queue<Node*> cq;
+
+    pq.push(root);
+
+    while(!pq.empty()) {
+        Node* node = pq.front();
+        pq.pop();
+        cout << node->data << " ";
+
+        for (Node* child: node->children) {
+            cq.push(child);
+        }
+        if (pq.empty()) {
+            cout << endl;
+            pq = cq;
+            cq = queue<Node*>();
+        }
+    }
+}
+
+// Method 2 : Using Delimiter as a node
+void levelOrderLinewiseGenericTree2(Node* root) {
+    queue<Node*> q;
+    q.push(root);
+    q.push(new Node(-1));
+
+    while(!q.empty()) {
+        Node* node = q.front();
+        q.pop();
+
+        if (node->data == -1) {
+            cout << endl;
+            if (!q.empty()) {
+                q.push(new Node(-1));
+            }
+        }
+        else {
+            cout << node->data << " ";
+            for (Node* child : node->children) {
+                q.push(child);
+            }
+        }
+    }
+}
+
+// Method 3 : Using Size variable
+void levelOrderLinewiseGenericTree3(Node* root) {
     queue<Node*> q;
     q.push(root);
 
@@ -53,6 +102,26 @@ void levelOrderLinewiseGenericTree(Node* root) {
     }
 }
 
+// Using pair of {node, level}
+void levelOrderLinewiseGenericTree4(Node* root) {
+    queue<pair<Node*, int>> q;
+    q.push({root, 1});
+    int level = 1;
+
+    while(!q.empty()) {
+        auto it = q.front();
+        q.pop();
+        if (level < it.second) {
+            cout << endl;
+            level++;
+        }
+        cout << it.first->data << " ";
+        for (Node* child: it.first->children) {
+            q.push({child, it.second+1});
+        }
+    }
+}
+
 int main() {
     vector<int> v;
     int temp;
@@ -63,5 +132,5 @@ int main() {
 
     Node* tree = createGenericTree(v);
 
-    levelOrderLinewiseGenericTree(tree);
+    levelOrderLinewiseGenericTree4(tree);
 }
